@@ -5,6 +5,8 @@ const sass = require('gulp-sass');
 const rename = require('gulp-rename');
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
+const sassGlob = require('gulp-sass-glob');
+const cssunit = require('gulp-css-unit');
 
 const del = require('del');
 const plumber = require('gulp-plumber');
@@ -30,7 +32,7 @@ const paths = {
         srcMain:'src/css/main.scss',
         src: 'src/css/**/*.scss',
         dest: 'build/css/'
-    },    
+    },
     images: {
         src: 'src/img/**/*.*',
         dest: 'build/img/'
@@ -74,6 +76,7 @@ function styles() {
                 };
             })}))
         .pipe(sourcemaps.init())
+        .pipe(sassGlob())
         .pipe(sass({
             outputStyle: 'compressed',
             includePaths: require('node-normalize-scss').includePaths
@@ -81,6 +84,10 @@ function styles() {
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
+        }))
+        .pipe(cssunit({
+            type     :    'px-to-rem',
+            rootSize :    16
         }))
         .pipe(sourcemaps.write())
         .pipe(rename({suffix: '.min'}))
@@ -102,7 +109,7 @@ function scripts() {
                     message: error.message
                 };
             })}))
-        .pipe(gulpWebpack(webpackConfig, webpack)) 
+        .pipe(gulpWebpack(webpackConfig, webpack))
         .pipe(gulp.dest(paths.scripts.dest));
 }
 
@@ -138,7 +145,7 @@ function fonts() {
 // svg
 function svg() {
     return gulp.src(paths.svg.src)
-        // удадяем атрибуты
+    // удаляем атрибуты
         .pipe(cheerio({
             run: function ($) {
                 $('[fill]').removeAttr('fill');
@@ -149,12 +156,12 @@ function svg() {
         }))
         // собираем svg спрайт
         .pipe(svgSprite({
-            mode: "symbols",
-            selector: "icon-%f",
-            svg: {
-                symbols: "sprite.svg"
-            },
-            preview: false
+                mode: "symbols",
+                selector: "icon-%f",
+                svg: {
+                    symbols: "sprite.svg"
+                },
+                preview: false
             }
         ))
         .pipe(gulp.dest(paths.svg.dest));
