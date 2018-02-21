@@ -1,3 +1,18 @@
+//Vars
+$font-size-body:16px;
 
-@import 'common/*';
+$green:#00bfa5;
+$dark-green:#009688;
+$gray:#455a64;
+$black:#373e42;
 
+//Layout
+@import "normalize";
+@import "common/fonts";
+@import "common/mixin";
+@import "common/options";
+@import "common/fontawesome-all";
+@import "common/common-class";
+
+// Styles
+//@import "section/welcome";

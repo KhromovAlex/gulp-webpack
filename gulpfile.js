@@ -1,12 +1,11 @@
 const gulp = require('gulp');
 const pug = require('gulp-pug');
-
+// CSS
 const sass = require('gulp-sass');
 const rename = require('gulp-rename');
 const sourcemaps = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
 const sassGlob = require('gulp-sass-glob');
-const cssunit = require('gulp-css-unit');
 
 const del = require('del');
 const plumber = require('gulp-plumber');
@@ -17,13 +16,13 @@ const browserSync = require('browser-sync').create();
 const gulpWebpack = require('gulp-webpack');
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config.js');
-
+//SVG
 const svgSprite = require('gulp-svg-sprites');
 const cheerio = require('gulp-cheerio');
 
 
 const paths = {
-    root: './build',
+    root: './build/assets',
     templates: {
         pages: 'src/pug/pages/*.pug',
         src: 'src/pug/**/*.pug'
@@ -31,23 +30,23 @@ const paths = {
     styles: {
         srcMain:'src/css/main.scss',
         src: 'src/css/**/*.scss',
-        dest: 'build/css/'
+        dest: 'build/assets/css/'
     },
     images: {
         src: 'src/img/**/*.*',
-        dest: 'build/img/'
+        dest: 'build/assets/img/'
     },
     fonts: {
         src: 'src/fonts/**/*.*',
-        dest: 'build/fonts/'
+        dest: 'build/assets/fonts/'
     },
     scripts: {
         src: 'src/js/app.js',
-        dest: 'build/js/'
+        dest: 'build/assets/js/'
     },
     svg: {
         src: 'src/img/icons/*.svg',
-        dest: 'build/img'
+        dest: 'build/assets/img'
     }
 };
 
@@ -84,10 +83,6 @@ function styles() {
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
-        }))
-        .pipe(cssunit({
-            type     :    'px-to-rem',
-            rootSize :    16
         }))
         .pipe(sourcemaps.write())
         .pipe(rename({suffix: '.min'}))
